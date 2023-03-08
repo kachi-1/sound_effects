@@ -3,7 +3,7 @@ let gain = new Tone.Gain(4).toDestination();
 let pan = new Tone.Panner().connect(gain);
 const distortion = new Tone.Distortion(1);
 const reverb = new Tone.Freeverb(0.7, 300000);
-reverb.wet.value = 0.6;
+reverb.wet.value = 0.1;
 const chorus = new Tone.Chorus(4, 2.5, 0.5);
 let ampEnv = new Tone.AmplitudeEnvelope({
   attack: 0.25,
@@ -12,9 +12,10 @@ let ampEnv = new Tone.AmplitudeEnvelope({
 }).connect(pan);
 osc.connect(ampEnv);
 let initTone = true;
-let oscFreq = 0;
-let pitch = 0;
 let showImg = false;
+osc.frequency.value = 100;
+osc.harmonicity.value = 1;
+osc.type.value = "sawtooth";
 
 let noise = new Tone.Noise().start();
 let noiseEnv = new Tone.AmplitudeEnvelope({
@@ -29,7 +30,7 @@ let noiseFilter = new Tone.Filter(800,"lowpass").connect(noiseEnv);
 noise.connect(noiseFilter);
 
 function preload() {
-  soundImage = loadImage("img/jedi.jpeg");
+  soundImage = loadImage("img/ufo.jpg");
 }
 
 function setup() {
@@ -47,11 +48,11 @@ function draw() {
     if (initTone === false) {
       text('Initialized',280, 150);
     }
-    text('press mouse to bear witness',100, 250);
+    text('The ship approaches, click the mouse to bear witness',100, 250);
 
   }else {
-    scale(0.5,0.5);
-    image(soundImage,800, 800 );
+    scale(1,1);
+    image(soundImage,400,400 );
 
   }
 }
@@ -69,10 +70,8 @@ function mousePressed() {
   }else showImg = true;
   if (showImg && !initTone) {
     
-    osc.frequency.value = 200;
     osc.mute =false;
-    osc.harmonicity.value = 2;
-    osc.type.value = "sawtooth";
+    
     ampEnv.triggerAttackRelease(60);
     
 
